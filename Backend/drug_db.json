@@ -1,0 +1,291 @@
+{
+  "drug_interactions": [
+    {
+      "drug1": "metformin",
+      "drug2": "ibuprofen",
+      "severity": "high",
+      "reason": "Ibuprofen can destabilize blood sugar levels when combined with Metformin, increasing the risk of hypoglycemia or hyperglycemia."
+    },
+    {
+      "drug1": "metformin",
+      "drug2": "aspirin",
+      "severity": "medium",
+      "reason": "Aspirin may enhance the hypoglycemic effect of Metformin, requiring closer blood sugar monitoring."
+    },
+    {
+      "drug1": "warfarin",
+      "drug2": "aspirin",
+      "severity": "critical",
+      "reason": "Both are blood thinners. Combined use significantly increases bleeding risk."
+    },
+    {
+      "drug1": "warfarin",
+      "drug2": "ibuprofen",
+      "severity": "critical",
+      "reason": "NSAIDs like Ibuprofen can increase bleeding risk when combined with Warfarin."
+    },
+    {
+      "drug1": "lisinopril",
+      "drug2": "ibuprofen",
+      "severity": "high",
+      "reason": "NSAIDs can reduce the effectiveness of ACE inhibitors like Lisinopril and may cause kidney problems."
+    },
+    {
+      "drug1": "amlodipine",
+      "drug2": "simvastatin",
+      "severity": "medium",
+      "reason": "Amlodipine can increase simvastatin levels, raising the risk of muscle damage (rhabdomyolysis)."
+    },
+    {
+      "drug1": "ciprofloxacin",
+      "drug2": "tizanidine",
+      "severity": "critical",
+      "reason": "Ciprofloxacin can greatly increase tizanidine levels, causing severe low blood pressure and drowsiness."
+    },
+    {
+      "drug1": "omeprazole",
+      "drug2": "clopidogrel",
+      "severity": "high",
+      "reason": "Omeprazole may reduce the effectiveness of Clopidogrel, increasing cardiovascular risk."
+    },
+    {
+      "drug1": "metformin",
+      "drug2": "alcohol",
+      "severity": "high",
+      "reason": "Alcohol increases the risk of lactic acidosis when combined with Metformin."
+    },
+    {
+      "drug1": "paracetamol",
+      "drug2": "warfarin",
+      "severity": "medium",
+      "reason": "High doses of Paracetamol may enhance the anticoagulant effect of Warfarin."
+    },
+    {
+      "drug1": "azithromycin",
+      "drug2": "antacids",
+      "severity": "medium",
+      "reason": "Antacids can reduce the absorption of Azithromycin. Take them 2 hours apart."
+    },
+    {
+      "drug1": "levothyroxine",
+      "drug2": "calcium",
+      "severity": "medium",
+      "reason": "Calcium supplements can interfere with Levothyroxine absorption. Take 4 hours apart."
+    },
+    {
+      "drug1": "prednisone",
+      "drug2": "ibuprofen",
+      "severity": "high",
+      "reason": "Combined use significantly increases the risk of gastrointestinal bleeding."
+    },
+    {
+      "drug1": "fluoxetine",
+      "drug2": "tramadol",
+      "severity": "critical",
+      "reason": "Increases risk of serotonin syndrome, a potentially life-threatening condition."
+    },
+    {
+      "drug1": "digoxin",
+      "drug2": "amiodarone",
+      "severity": "critical",
+      "reason": "Amiodarone can increase digoxin levels, leading to toxicity."
+    },
+    {
+      "drug1": "azithromycin",
+      "drug2": "warfarin",
+      "severity": "high",
+      "reason": "Azithromycin can enhance the anticoagulant effect of Warfarin, increasing bleeding risk."
+    },
+    {
+      "drug1": "ciprofloxacin",
+      "drug2": "theophylline",
+      "severity": "critical",
+      "reason": "Ciprofloxacin significantly increases theophylline levels, causing potential toxicity."
+    },
+    {
+      "drug1": "azithromycin",
+      "drug2": "digoxin",
+      "severity": "high",
+      "reason": "Macrolide antibiotics like azithromycin can increase digoxin levels."
+    },
+    {
+      "drug1": "simvastatin",
+      "drug2": "clarithromycin",
+      "severity": "critical",
+      "reason": "Clarithromycin significantly increases simvastatin levels, greatly increasing risk of muscle damage."
+    },
+    {
+      "drug1": "metformin",
+      "drug2": "contrast_dye",
+      "severity": "critical",
+      "reason": "Contrast dye with metformin can cause lactic acidosis and kidney damage. Metformin should be stopped before contrast procedures."
+    },
+    {
+      "drug1": "amoxicillin",
+      "drug2": "warfarin",
+      "severity": "medium",
+      "reason": "Some antibiotics including amoxicillin may enhance warfarin's anticoagulant effect."
+    },
+    {
+      "drug1": "prednisone",
+      "drug2": "warfarin",
+      "severity": "high",
+      "reason": "Corticosteroids can either increase or decrease warfarin's effect, requiring careful monitoring."
+    },
+    {
+      "drug1": "omeprazole",
+      "drug2": "metformin",
+      "severity": "low",
+      "reason": "PPIs may slightly increase metformin levels, but interaction is generally not clinically significant."
+    },
+    {
+      "drug1": "levothyroxine",
+      "drug2": "omeprazole",
+      "severity": "medium",
+      "reason": "PPIs can reduce absorption of levothyroxine, potentially requiring dose adjustment."
+    },
+    {
+      "drug1": "azithromycin",
+      "drug2": "antacids",
+      "severity": "medium",
+      "reason": "Antacids can reduce absorption of azithromycin if taken simultaneously. Space doses apart."
+    }
+  ],
+  "allergy_database": [
+    {
+      "medicine": "amoxicillin",
+      "allergy_type": "penicillin",
+      "severity": "critical",
+      "reason": "Amoxicillin belongs to the penicillin family and may cause severe allergic reactions including anaphylaxis."
+    },
+    {
+      "medicine": "ampicillin",
+      "allergy_type": "penicillin",
+      "severity": "critical",
+      "reason": "Ampicillin is a penicillin antibiotic and can cause severe allergic reactions in penicillin-allergic patients."
+    },
+    {
+      "medicine": "cefuroxime",
+      "allergy_type": "penicillin",
+      "severity": "high",
+      "reason": "Cephalosporins may cross-react with penicillin allergy in about 10% of cases."
+    },
+    {
+      "medicine": "cephalexin",
+      "allergy_type": "penicillin",
+      "severity": "high",
+      "reason": "Cephalosporins may cross-react with penicillin allergy. Use with caution."
+    },
+    {
+      "medicine": "aspirin",
+      "allergy_type": "nsaid",
+      "severity": "high",
+      "reason": "Aspirin allergy can cause respiratory issues, hives, or anaphylaxis."
+    },
+    {
+      "medicine": "ibuprofen",
+      "allergy_type": "nsaid",
+      "severity": "high",
+      "reason": "Patients allergic to NSAIDs may experience severe reactions to Ibuprofen."
+    },
+    {
+      "medicine": "naproxen",
+      "allergy_type": "nsaid",
+      "severity": "high",
+      "reason": "Cross-reactivity with other NSAIDs. May cause allergic reactions."
+    },
+    {
+      "medicine": "codeine",
+      "allergy_type": "opioid",
+      "severity": "high",
+      "reason": "Opioid allergy can cause respiratory depression and severe reactions."
+    },
+    {
+      "medicine": "morphine",
+      "allergy_type": "opioid",
+      "severity": "high",
+      "reason": "Can cause severe allergic reactions in opioid-sensitive patients."
+    },
+    {
+      "medicine": "sulfonamide",
+      "allergy_type": "sulfa",
+      "severity": "high",
+      "reason": "Sulfa allergy can cause severe skin reactions and organ damage."
+    },
+    {
+      "medicine": "trimethoprim-sulfamethoxazole",
+      "allergy_type": "sulfa",
+      "severity": "high",
+      "reason": "Contains sulfa component that can cause allergic reactions."
+    },
+    {
+      "medicine": "contrast dye",
+      "allergy_type": "iodine",
+      "severity": "critical",
+      "reason": "Iodine-based contrast can cause severe anaphylactic reactions."
+    },
+    {
+      "medicine": "azithromycin",
+      "allergy_type": "macrolide",
+      "severity": "high",
+      "reason": "Azithromycin is a macrolide antibiotic that can cause allergic reactions including rash, swelling, and respiratory issues."
+    },
+    {
+      "medicine": "clarithromycin",
+      "allergy_type": "macrolide",
+      "severity": "high",
+      "reason": "Clarithromycin belongs to the macrolide family and may cause cross-reactions in macrolide-allergic patients."
+    },
+    {
+      "medicine": "erythromycin",
+      "allergy_type": "macrolide",
+      "severity": "high",
+      "reason": "Erythromycin is a macrolide antibiotic that can cause severe allergic reactions in sensitive patients."
+    },
+    {
+      "medicine": "ciprofloxacin",
+      "allergy_type": "fluoroquinolone",
+      "severity": "high",
+      "reason": "Fluoroquinolone antibiotics can cause severe allergic reactions including tendon rupture and CNS effects."
+    },
+    {
+      "medicine": "levofloxacin",
+      "allergy_type": "fluoroquinolone",
+      "severity": "high",
+      "reason": "Cross-reactivity with other fluoroquinolones. Can cause severe side effects."
+    },
+    {
+      "medicine": "doxycycline",
+      "allergy_type": "tetracycline",
+      "severity": "medium",
+      "reason": "Tetracycline antibiotics can cause photosensitivity and allergic reactions."
+    },
+    {
+      "medicine": "minocycline",
+      "allergy_type": "tetracycline",
+      "severity": "medium",
+      "reason": "Can cause cross-reactions in tetracycline-allergic patients."
+    }
+  ],
+  "medicine_aliases": {
+    "paracetamol": ["acetaminophen", "tylenol", "crocin", "dolo"],
+    "ibuprofen": ["brufen", "advil", "motrin", "nurofen"],
+    "amoxicillin": ["amoxil", "moxatag"],
+    "metformin": ["glucophage", "fortamet", "glumetza"],
+    "aspirin": ["ecosprin", "disprin"],
+    "omeprazole": ["prilosec", "losec"],
+    "azithromycin": ["zithromax", "azithral"],
+    "ciprofloxacin": ["cipro", "ciplox"],
+    "levothyroxine": ["synthroid", "levoxyl"],
+    "amlodipine": ["norvasc"],
+    "lisinopril": ["prinivil", "zestril"],
+    "warfarin": ["coumadin"],
+    "clopidogrel": ["plavix"],
+    "simvastatin": ["zocor"],
+    "prednisone": ["deltasone"],
+    "fluoxetine": ["prozac"],
+    "tramadol": ["ultram"],
+    "digoxin": ["lanoxin"],
+    "antacids": ["antacid", "gelusil", "gaviscon"]
+  }
+}

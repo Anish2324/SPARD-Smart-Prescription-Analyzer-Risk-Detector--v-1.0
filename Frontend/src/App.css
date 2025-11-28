@@ -1,0 +1,56 @@
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.risk-level-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.875rem;
+}
+
+.risk-critical {
+  background-color: var(--danger-color);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.39);
+}
+
+.risk-high {
+  background-color: var(--warning-color);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(245, 158, 11, 0.39);
+}
+
+.risk-medium {
+  background-color: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+}
+
+.risk-low {
+  background-color: var(--secondary-color);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+}
+
+.report-section {
+  margin-top: 2rem;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: var(--card-background);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.report-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 1rem;
+}
