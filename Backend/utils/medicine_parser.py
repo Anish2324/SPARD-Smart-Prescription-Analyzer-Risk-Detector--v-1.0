@@ -5,47 +5,45 @@ import re
 class MedicineParser:
     """Parses raw OCR text to identify and normalize medicine names."""
     
-    def __init__(self, db_path=None):
-        if db_path is None:
-            # Correctly construct the path to drug_db.json relative to this file
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            db_path = os.path.join(base_dir, 'drug_db.json')
-            
-        self.db_path = db_path
-        self._load_databases()
+    def __init__(self):
+        # Use basic medicine patterns instead of external database
+        self._init_basic_patterns()
 
-    def _load_databases(self):
-        """Load medicine aliases and all known drug names from the JSON database."""
-        try:
-            with open(self.db_path, 'r') as f:
-                db = json.load(f)
-                self.aliases = db.get('medicine_aliases', {})
-                
-                # Create a reverse map for quick normalization
-                self.reverse_aliases = {}
-                for standard_name, alias_list in self.aliases.items():
-                    for alias in alias_list:
-                        self.reverse_aliases[alias.lower()] = standard_name.lower()
-                
-                # Create a set of all known medicine names (standard and aliases)
-                self.known_medicines = set(self.aliases.keys())
-                for alias_list in self.aliases.values():
-                    self.known_medicines.update(alias.lower() for alias in alias_list)
-                
-                # Add drugs from interactions to the known list
-                for interaction in db.get('drug_interactions', []):
-                    self.known_medicines.add(interaction['drug1'].lower())
-                    self.known_medicines.add(interaction['drug2'].lower())
-                
-                # Add drugs from allergies to the known list
-                for allergy in db.get('allergy_database', []):
-                    self.known_medicines.add(allergy['medicine'].lower())
-
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading medicine database: {e}")
-            self.aliases = {}
-            self.reverse_aliases = {}
-            self.known_medicines = set()
+    def _init_basic_patterns(self):
+        """Initialize basic medicine patterns without external database."""
+        # Extended common medicine aliases
+        self.aliases = {
+            'acetaminophen': ['tylenol', 'paracetamol'],
+            'ibuprofen': ['advil', 'motrin'],
+            'aspirin': ['aspirin', 'acetylsalicylic acid'],
+            'amoxicillin': ['amoxil', 'trimox'],
+            'azithromycin': ['azithromycin', 'zithromax', 'z-pak'],
+            'lisinopril': ['lisinopril', 'prinivil', 'zestril'],
+            'metformin': ['metformin', 'glucophage'],
+            'atorvastatin': ['atorvastatin', 'lipitor'],
+            'amlodipine': ['amlodipine', 'norvasc'],
+            'omeprazole': ['omeprazole', 'prilosec'],
+            'losartan': ['losartan', 'cozaar'],
+            'simvastatin': ['simvastatin', 'zocor'],
+            'hydrochlorothiazide': ['hydrochlorothiazide', 'hctz', 'microzide'],
+            'warfarin': ['warfarin', 'coumadin'],
+            'clopidogrel': ['clopidogrel', 'plavix'],
+            'prednisone': ['prednisone', 'deltasone'],
+            'ciprofloxacin': ['ciprofloxacin', 'cipro'],
+            'doxycycline': ['doxycycline', 'vibramycin'],
+            'levothyroxine': ['levothyroxine', 'synthroid'],
+            'furosemide': ['furosemide', 'lasix']
+        }
+        
+        # Create a reverse map for quick normalization
+        self.reverse_aliases = {}
+        for standard_name, alias_list in self.aliases.items():
+            for alias in alias_list:
+                self.reverse_aliases[alias.lower()] = standard_name.lower()
+        
+        self.known_medicines = set(self.aliases.keys())
+        for alias_list in self.aliases.values():
+            self.known_medicines.update(alias.lower() for alias in alias_list)
 
     def _normalize_medicine_name(self, name):
         """Normalize a medicine name to its standard form using the alias database."""

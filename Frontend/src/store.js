@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import API_BASE_URL from './config/api';
 
 export const useStore = create((set, get) => ({
     // Prescription analysis state
@@ -14,35 +15,31 @@ export const useStore = create((set, get) => ({
     // Authentication actions
     login: async (email, password) => {
         try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 800));
-            
-            // Get users from local storage
-            const existingUsers = JSON.parse(localStorage.getItem('prescription-safety-users') || '[]');
-            const user = existingUsers.find(u => u.email === email && u.password === password);
-            
-            if (!user) {
-                return { success: false, error: 'Invalid email or password' };
-            }
-            
-            // Create user object without password
-            const userData = {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                age: user.age,
-                gender: user.gender,
-                allergies: user.allergies || []
-            };
-            
-            // Set current user
-            set({ 
-                user: userData, 
-                isAuthenticated: true 
+            // Call Flask backend API
+            const response = await fetch(`${API_BASE_URL}/api/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
             });
-            localStorage.setItem('prescription-safety-user', JSON.stringify(userData));
             
-            return { success: true, user: userData };
+            const result = await response.json();
+            
+            if (response.ok && result.success) {
+                // Set current user
+                const userData = result.user;
+                set({ 
+                    user: userData, 
+                    isAuthenticated: true 
+                });
+                localStorage.setItem('prescription-safety-user', JSON.stringify(userData));
+                localStorage.setItem('prescription-safety-token', result.token);
+                
+                return { success: true, user: userData };
+            } else {
+                return { success: false, error: result.error || result.message || 'Login failed' };
+            }
             
         } catch (error) {
             console.error('Login error:', error);
@@ -52,40 +49,34 @@ export const useStore = create((set, get) => ({
     
     register: async (userData) => {
         try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Check if user already exists locally
-            const existingUsers = JSON.parse(localStorage.getItem('prescription-safety-users') || '[]');
-            const userExists = existingUsers.find(user => user.email === userData.email);
-            
-            if (userExists) {
-                return { success: false, error: 'User with this email already exists' };
-            }
-            
-            // Create new user with ID
-            const newUser = {
-                id: Date.now().toString(),
-                name: userData.name,
-                email: userData.email,
-                age: userData.age,
-                gender: userData.gender,
-                allergies: userData.allergies || [],
-                createdAt: new Date().toISOString()
-            };
-            
-            // Save to local storage
-            existingUsers.push({ ...newUser, password: userData.password }); // Store password for login
-            localStorage.setItem('prescription-safety-users', JSON.stringify(existingUsers));
-            
-            // Set current user
-            set({ 
-                user: newUser, 
-                isAuthenticated: true 
+            // Call Flask backend API
+            const response = await fetch(`${API_BASE_URL}/api/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
             });
-            localStorage.setItem('prescription-safety-user', JSON.stringify(newUser));
             
-            return { success: true, user: newUser };
+            const result = await response.json();
+            
+            if (response.ok && result.success) {
+                // Set current user
+                const newUser = result.user;
+                set({ 
+                    user: newUser, 
+                    isAuthenticated: true 
+                });
+                localStorage.setItem('prescription-safety-user', JSON.stringify(newUser));
+                localStorage.setItem('prescription-safety-token', result.token);
+                
+                // Set flag to indicate user just registered
+                sessionStorage.setItem('userJustRegistered', 'true');
+                
+                return { success: true, user: newUser };
+            } else {
+                return { success: false, error: result.error || result.message || 'Registration failed' };
+            }
             
         } catch (error) {
             console.error('Registration error:', error);

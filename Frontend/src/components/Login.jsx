@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { useStore } from '../store';
 
@@ -38,7 +38,7 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
             } else {
                 toast.error(result.error);
             }
-        } catch (error) {
+        } catch {
             toast.error('Login failed. Please try again.');
         } finally {
             setIsLoading(false);
@@ -46,105 +46,171 @@ const Login = ({ onLogin, onSwitchToRegister }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center px-4">
-            <div className="max-w-lg w-full bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-10">
-                <div className="text-center mb-10">
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                        </svg>
+        <div className="min-h-screen bg-linear-to-br from-blue-50/80 via-white to-teal-50/60 flex items-center justify-center px-4 py-8">
+            {/* Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute top-0 left-0 w-72 h-72 bg-blue-200 rounded-full -translate-x-1/2 -translate-y-1/2 opacity-20"></div>
+                <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-200 rounded-full translate-x-1/3 translate-y-1/3 opacity-20"></div>
+                <div className="absolute top-1/2 right-1/4 w-48 h-48 bg-indigo-100 rounded-full opacity-30"></div>
+            </div>
+
+            <div className="relative max-w-md w-full">
+                {/* Main Card */}
+                <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+                    {/* Healthcare Header Banner */}
+                    <div className="bg-linear-to-r from-blue-600 to-teal-500 p-6 text-center">
+                        <div className="flex items-center justify-center gap-3 mb-3">
+                            <div className="bg-white/20 p-2 rounded-2xl">
+                                <ShieldCheckIcon className="h-8 w-8 text-white" />
+                            </div>
+                            <h1 className="text-2xl font-bold text-white">SPARD</h1>
+                        </div>
+                        <p className="text-blue-100 text-sm font-medium">
+                            Smart Prescription Analyzer & Risk Detector
+                        </p>
                     </div>
-                    <h1 className="text-4xl font-bold text-slate-800 mb-3">Welcome Back</h1>
-                    <p className="text-slate-600 text-lg">Sign in to your secure dashboard</p>
+
+                    <div className="p-8">
+                        {/* Welcome Section */}
+                        <div className="text-center mb-8">
+                            <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-blue-500 to-teal-400 rounded-2xl shadow-lg mb-4">
+                                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h2>
+                            <p className="text-gray-600">Sign in to access your prescription safety dashboard</p>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Email Field */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 items-center">
+                                    <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                    </svg>
+                                    Email Address
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 placeholder-gray-400 shadow-sm"
+                                    placeholder="Enter your email address"
+                                    required
+                                />
+                            </div>
+
+                            {/* Password Field */}
+                            <div className="relative">
+                                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2 items-center">
+                                    <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                    </svg>
+                                    Password
+                                </label>
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    className="w-full px-4 py-3.5 bg-white border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-900 placeholder-gray-400 shadow-sm pr-12"
+                                    placeholder="Enter your password"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-3 top-11 p-1 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
+                                >
+                                    {showPassword ? (
+                                        <EyeSlashIcon className="h-5 w-5" />
+                                    ) : (
+                                        <EyeIcon className="h-5 w-5" />
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Remember Me & Forgot Password */}
+                            <div className="flex items-center justify-between">
+                                <label className="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 bg-white transition duration-200" 
+                                    />
+                                    <span className="ml-2 text-sm text-gray-600 font-medium">Remember me</span>
+                                </label>
+                                <button 
+                                    type="button" 
+                                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200"
+                                >
+                                    Forgot password?
+                                </button>
+                            </div>
+
+                            {/* Submit Button */}
+                            <button
+                                type="submit"
+                                disabled={isLoading}
+                                className="w-full bg-linear-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                            >
+                                {isLoading ? (
+                                    <div className="flex items-center justify-center gap-3">
+                                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                                        Signing you in...
+                                    </div>
+                                ) : (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                                        </svg>
+                                        Sign In to Dashboard
+                                    </span>
+                                )}
+                            </button>
+                        </form>
+
+                        {/* Security Notice */}
+                        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
+                            <div className="flex items-start gap-3">
+                                <ShieldCheckIcon className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                                <div>
+                                    <p className="text-blue-800 font-medium text-sm">Secure Login</p>
+                                    <p className="text-blue-600 text-xs mt-1">
+                                        Your health data is protected with enterprise-grade security and encryption.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Registration Prompt */}
+                        <div className="mt-8 text-center">
+                            <div className="flex items-center justify-center mb-4">
+                                <div className="h-px bg-gray-200 flex-1"></div>
+                                <span className="px-4 text-sm text-gray-500 font-medium">New to SPARD?</span>
+                                <div className="h-px bg-gray-200 flex-1"></div>
+                            </div>
+                            <button
+                                onClick={onSwitchToRegister}
+                                className="text-blue-600 hover:text-blue-700 font-semibold text-lg transition-colors duration-200 hover:underline underline-offset-4"
+                            >
+                                Create your secure account
+                            </button>
+                            <p className="text-gray-500 text-sm mt-2">
+                                Get started with prescription safety analysis
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
-                            Email Address
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-slate-900 placeholder-slate-400 shadow-sm"
-                            placeholder="Enter your email address"
-                            required
-                        />
-                    </div>
-
-                    <div className="relative">
-                        <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
-                            Password
-                        </label>
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            id="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 text-slate-900 placeholder-slate-400 shadow-sm pr-12"
-                            placeholder="Enter your password"
-                            required
-                        />
-                        <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-11 text-slate-400 hover:text-slate-600 transition-colors"
-                        >
-                            {showPassword ? (
-                                <EyeSlashIcon className="h-5 w-5" />
-                            ) : (
-                                <EyeIcon className="h-5 w-5" />
-                            )}
-                        </button>
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                        <label className="flex items-center">
-                            <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 bg-white" />
-                            <span className="ml-2 text-sm text-slate-600">Remember me</span>
-                        </label>
-                        <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
-                            Forgot password?
-                        </button>
-                    </div>
-
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-                    >
-                        {isLoading ? (
-                            <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                                Signing you in...
-                            </div>
-                        ) : (
-                            <span className="flex items-center justify-center">
-                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                </svg>
-                                Sign In
-                            </span>
-                        )}
-                    </button>
-                </form>
-
-                <div className="mt-8 text-center">
-                    <div className="flex items-center justify-center mb-4">
-                        <div className="h-px bg-slate-200 flex-1"></div>
-                        <span className="px-4 text-sm text-slate-500">New to our platform?</span>
-                        <div className="h-px bg-slate-200 flex-1"></div>
-                    </div>
-                    <button
-                        onClick={onSwitchToRegister}
-                        className="text-indigo-600 hover:text-indigo-700 font-semibold text-lg transition-colors duration-200 underline underline-offset-4 decoration-2 hover:decoration-indigo-600"
-                    >
-                        Create your account
-                    </button>
+                {/* Footer Note */}
+                <div className="text-center mt-6">
+                    <p className="text-gray-400 text-sm">
+                        🔒 HIPAA Compliant • End-to-End Encrypted • Your Data is Secure
+                    </p>
                 </div>
             </div>
         </div>

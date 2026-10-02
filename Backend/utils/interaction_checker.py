@@ -5,26 +5,30 @@ from itertools import combinations
 class InteractionChecker:
     """Checks for drug-drug interactions and allergy conflicts."""
     
-    def __init__(self, db_path=None):
-        if db_path is None:
-            # Correctly construct the path to drug_db.json relative to this file
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            db_path = os.path.join(base_dir, 'drug_db.json')
-            
-        self.db_path = db_path
-        self._load_databases()
+    def __init__(self):
+        # Use basic interaction and allergy data
+        self._init_basic_data()
 
-    def _load_databases(self):
-        """Load interaction and allergy databases from the JSON file."""
-        try:
-            with open(self.db_path, 'r') as f:
-                db = json.load(f)
-                self.interactions = db.get('drug_interactions', [])
-                self.allergies = db.get('allergy_database', [])
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading interaction/allergy database: {e}")
-            self.interactions = []
-            self.allergies = []
+    def _init_basic_data(self):
+        """Initialize basic interaction and allergy data."""
+        # Basic drug interactions (this would be replaced by AI analysis)
+        self.interactions = [
+            {
+                "drug1": "warfarin",
+                "drug2": "aspirin",
+                "severity": "severe",
+                "description": "Increased risk of bleeding"
+            }
+        ]
+        
+        # Basic allergy data
+        self.allergies = [
+            {
+                "medicine": "penicillin",
+                "allergy_type": "antibiotic",
+                "severity": "severe"
+            }
+        ]
 
     def check_interactions(self, medicines):
         """

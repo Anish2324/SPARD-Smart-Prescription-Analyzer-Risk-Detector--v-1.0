@@ -1,0 +1,9 @@
+Backend/.env
+Backend/temp/*
+Backend/__pycache__/
+Backend/utils/__pycache__/
+Frontend/node_modules/
+Frontend/dist/
+__pycache__/
+*.py[cod]
+*.log

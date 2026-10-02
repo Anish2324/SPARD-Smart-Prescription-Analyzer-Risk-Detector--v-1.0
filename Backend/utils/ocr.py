@@ -2,6 +2,7 @@ import os
 import cv2
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
+import google.generativeai as genai
 
 # Try to import OCR dependencies
 try:
@@ -10,15 +11,29 @@ try:
     TESSERACT_AVAILABLE = True
 except ImportError:
     TESSERACT_AVAILABLE = False
-    print("⚠️ Tesseract OCR not available. Using fallback mode for testing.")
+    print("⚠️ Tesseract OCR not available. Will use Gemini Vision as fallback.")
 
 from config import Config
 
 class OCRProcessor:
-    """Handles Optical Character Recognition (OCR) to extract text from images and PDFs."""
+    """Handles Optical Character Recognition (OCR) to extract text from images and PDFs.
+    Uses Tesseract OCR as primary method and Gemini Vision as intelligent fallback.
+    """
     
     def __init__(self):
         self.tesseract_available = TESSERACT_AVAILABLE
+        
+        # Initialize Gemini for fallback
+        self.gemini_api_key = getattr(Config, 'GEMINI_API_KEY', None)
+        self.gemini_model = None
+        if self.gemini_api_key:
+            try:
+                genai.configure(api_key=self.gemini_api_key)
+                self.gemini_model = genai.GenerativeModel('gemini-2.0-flash-exp')
+                print("✅ Gemini Vision initialized as OCR fallback")
+            except Exception as e:
+                print(f"⚠️ Gemini Vision initialization failed: {e}")
+        
         if TESSERACT_AVAILABLE:
             try:
                 # Set the path to the Tesseract executable
@@ -71,6 +86,45 @@ class OCRProcessor:
             print(f"⚠️ Image preprocessing failed: {e}, using original image")
             return Image.open(image_path)
 
+    def _extract_with_gemini_vision(self, image_path):
+        """Use Gemini Vision to extract text from prescription image as fallback."""
+        if not self.gemini_model:
+            return None
+            
+        try:
+            print(f"🤖 Using Gemini Vision as OCR fallback for: {image_path}")
+            
+            # Open and prepare image for Gemini
+            image = Image.open(image_path)
+            
+            # Create prompt for prescription text extraction
+            prompt = """
+Please extract all text from this prescription image. Focus on:
+1. Doctor's name and clinic information
+2. Patient information
+3. All medication names, dosages, and instructions
+4. Any other relevant medical text
+
+Return only the extracted text, maintaining the original structure as much as possible.
+If this is not a prescription image, please say "Not a prescription image".
+"""
+            
+            # Send image to Gemini Vision
+            response = self.gemini_model.generate_content([prompt, image])
+            
+            if response and response.text:
+                extracted_text = response.text.strip()
+                print(f"🤖 GEMINI VISION: Successfully extracted {len(extracted_text)} characters")
+                print(f"📝 Gemini extraction preview: {extracted_text[:200]}...")
+                return extracted_text
+            else:
+                print("⚠️ GEMINI VISION: Returned empty response")
+                return None
+                
+        except Exception as e:
+            print(f"❌ Gemini Vision OCR failed: {e}")
+            return None
+
     def _is_pdf(self, filepath):
         """Check if the file is a PDF."""
         return filepath.lower().endswith('.pdf')
@@ -93,21 +147,20 @@ class OCRProcessor:
     def _process_image(self, filepath):
         """Extract text from a single image file with enhanced preprocessing."""
         if not self.tesseract_available:
-            print("⚠️ OCR not available. Returning mock data for testing.")
-            filename = os.path.basename(filepath).lower()
-            if 'prescription1' in filename or '1' in filename:
-                return "Prescription from Dr. Smith\nMetformin 500mg twice daily\nLisinopril 10mg once daily"
-            else:
-                return "Prescription from Dr. Johnson\nIbuprofen 400mg as needed\nAmoxicillin 500mg three times daily"
+            print("⚠️ Tesseract OCR not available. Trying Gemini Vision fallback...")
+            if os.path.exists(filepath):
+                gemini_result = self._extract_with_gemini_vision(filepath)
+                if gemini_result:
+                    print("✅ SUCCESS: Text extracted using GEMINI VISION (OCR unavailable)")
+                    return {'text': gemini_result, 'method': 'gemini_vision', 'success': True}
+            print("❌ FAILED: Both Tesseract and Gemini Vision unavailable")
+            return {'text': 'Error: Unable to extract text. Please ensure the image is clear and readable.', 'method': 'error', 'success': False}
         
         try:
             print(f"🔍 Processing image: {filepath}")
             if not os.path.exists(filepath):
-                filename = os.path.basename(filepath).lower()
-                if 'prescription1' in filename or '1' in filename:
-                    return "Prescription from Dr. Smith\nMetformin 500mg twice daily\nLisinopril 10mg once daily"
-                else:
-                    return "Prescription from Dr. Johnson\nIbuprofen 400mg as needed\nAmoxicillin 500mg three times daily"
+                print("❌ FAILED: Image file not found")
+                return {'text': 'Error: Image file not found.', 'method': 'error', 'success': False}
             
             # Try simple OCR first (often works best for clean prescription images)
             simple_result = pytesseract.image_to_string(Image.open(filepath))
@@ -153,7 +206,7 @@ class OCRProcessor:
             
             # Clean up the result
             result = result.strip()
-            print(f"✅ OCR extracted {len(result)} characters")
+            print(f"✅ SUCCESS: Text extracted using TESSERACT OCR ({len(result)} characters)")
             
             # Debug: Show first 200 characters of extracted text
             if result:
@@ -164,16 +217,21 @@ class OCRProcessor:
             if len(result) < 10:
                 print("⚠️ Very little text extracted. Image may be unclear or rotated.")
                 
-            return result
+            return {'text': result, 'method': 'tesseract', 'success': True}
             
         except Exception as e:
-            print(f"❌ Error processing image {filepath}: {e}")
-            # Return mock data as fallback
-            filename = os.path.basename(filepath).lower()
-            if 'prescription1' in filename or '1' in filename:
-                return "Prescription from Dr. Smith\nMetformin 500mg twice daily\nLisinopril 10mg once daily"
-            else:
-                return "Prescription from Dr. Johnson\nIbuprofen 400mg as needed\nAmoxicillin 500mg three times daily"
+            print(f"❌ TESSERACT FAILED for {filepath}: {e}")
+            print("🔄 FALLBACK: Trying Gemini Vision...")
+            
+            # Try Gemini Vision as fallback
+            if os.path.exists(filepath):
+                gemini_result = self._extract_with_gemini_vision(filepath)
+                if gemini_result:
+                    print("✅ SUCCESS: Text extracted using GEMINI VISION (Tesseract fallback)")
+                    return {'text': gemini_result, 'method': 'gemini_vision', 'success': True}
+            
+            print(f"❌ FAILED: Both Tesseract and Gemini Vision failed")
+            return {'text': f'Error: Failed to extract text from image. OCR error: {str(e)}', 'method': 'error', 'success': False}
 
     def _process_pdf(self, filepath):
         """Convert PDF to images and extract text from each page."""
@@ -203,7 +261,11 @@ class OCRProcessor:
             filepath (str): The absolute path to the file.
             
         Returns:
-            str: The extracted text.
+            dict: {
+                'text': str - The extracted text,
+                'method': str - Method used ('tesseract', 'gemini_vision', 'text_file', 'pdf', 'error'),
+                'success': bool - Whether extraction was successful
+            }
         """        
         file_extension = os.path.splitext(filepath)[1].lower()
         print(f"📄 Processing file type: {file_extension}")
@@ -211,12 +273,14 @@ class OCRProcessor:
         if file_extension in ['.txt']:
             if not os.path.exists(filepath):
                 print(f"❌ Text file not found: {filepath}")
-                return ""
-            return self._process_text_file(filepath)
+                return {'text': '', 'method': 'error', 'success': False}
+            text = self._process_text_file(filepath)
+            return {'text': text, 'method': 'text_file', 'success': bool(text)}
         elif file_extension == '.pdf':
-            return self._process_pdf(filepath)
+            text = self._process_pdf(filepath)
+            return {'text': text, 'method': 'pdf', 'success': bool(text)}
         else:
-            # For images, _process_image handles missing files with mock data
+            # For images, _process_image now returns dict with method info
             return self._process_image(filepath)
 
 # Example usage:
